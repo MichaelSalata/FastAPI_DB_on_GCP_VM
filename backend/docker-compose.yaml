@@ -1,0 +1,50 @@
+services:
+  pgdatabase:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: "${PG_USER}"
+      POSTGRES_PASSWORD: "${PG_PASSWORD}"
+      POSTGRES_DB: "${PG_DATABASE}"
+    volumes:
+      - "./data/postgres-db-volume:/var/lib/postgresql/data:rw"
+    ports:
+      - "5433:5432"
+    # healthcheck:
+    #   test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+    #   # test: ["CMD", "pg_isready", "-U", "${PG_DATABASE}"]
+    #   interval: 10s
+    #   retries: 5
+    #   start_period: 5s
+    # restart: always
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL}"
+      PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_PASSWORD}"
+    volumes:
+      - "./data/data_pgadmin:/var/lib/pgadmin"
+    ports:
+      - "8081:80"
+    depends_on:
+      - pgdatabase  
+  # fastapi_server:
+  #   image: ${DOCKER_IMAGE_NAME:-backend/fastapi}
+  #   build:
+  #     context: .
+  #     dockerfile: ./fastapi.Dockerfile
+  #   restart: always
+  #   command: "sh -c 'uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8080'"
+  #   volumes:
+  #     - ./backend/app:/code
+  #   environment:
+  #     PG_HOST: "${PG_HOST}"
+  #     PG_USER: "${PG_USER}"
+  #     PG_PASSWORD: "${PG_PASSWORD}"
+  #     PG_PORT: "${PG_PORT}"
+  #     PG_DATABASE: "${PG_DATABASE}"
+  #   user: "${UID:-50000}:0"
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     pgdatabase:
+  #       condition: service_healthy
