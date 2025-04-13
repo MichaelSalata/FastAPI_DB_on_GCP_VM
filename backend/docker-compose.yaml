@@ -24,9 +24,9 @@ services:
     volumes:
       - "./data/data_pgadmin:/var/lib/pgadmin"
     ports:
-      - "8081:80"
+      - "8080:80"
     depends_on:
-      - pgdatabase  
+      - pgdatabase
   # fastapi_server:
   #   image: ${DOCKER_IMAGE_NAME:-backend/fastapi}
   #   build:
