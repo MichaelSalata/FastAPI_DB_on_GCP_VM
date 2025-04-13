@@ -2,17 +2,6 @@
 github_project_name="o1_backend"
 github_repo_name="https://github.com/MichaelSalata/${github_project_name}.git"
 git_branch="main"
-
-sudo snap install docker
-sudo groupadd -f docker
-sudo usermod -aG docker $(whoami)
-
-echo "Waiting for Docker socket to be available..."
-while [ ! -S /var/run/docker.sock ]; do sleep 1; done
-
-sudo chown root:docker /var/run/docker.sock
-sudo chmod 660 /var/run/docker.sock
-
 newgrp docker <<EOF
 if [ ! -d "${github_project_name}" ]; then
   git clone ${github_repo_name}
