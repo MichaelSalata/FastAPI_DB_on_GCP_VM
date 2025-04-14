@@ -1,11 +1,13 @@
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    DATABASE_URL: str = "postgresql://admin@admin.com:root@localhost:5433/postgres"
+    DATABASE_URL: str
+    PYTHONPATH: str
 
     class Config:
         env_file = ".env"
-
+        env_prefix="API_"
+        extra="allow"
 
 settings = Settings()
