@@ -1,8 +1,17 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Dict
+from api.endpoints.user import router as user_router
+from models.user import Base
+from core.database import engine
 
 app = FastAPI()
+
+# Create database tables
+@app.on_event("startup")
+async def startup():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
 
 class User(BaseModel):
     id: int
@@ -58,3 +67,5 @@ async def delete_user(user_id: int):
         raise HTTPException(status_code=404, detail="User not found")
     del users_db[user_id]
     return {"message": "User {user_id} deleted"}
+
+app.include_router(user_router, prefix="/users", tags=["users"])
