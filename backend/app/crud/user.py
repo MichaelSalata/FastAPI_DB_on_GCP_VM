@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from models.user import User
-from schemas.user import UserCreate
+from ..models.user import User
+from ..schemas.user import UserCreate
 
 async def get_user(db: AsyncSession, user_id: int):
     result = await db.execute(select(User).where(User.id == user_id))

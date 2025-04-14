@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Dict
-from api.endpoints.user import router as user_router
-from models.user import Base
-from core.database import engine
+from .models.user import Base
+from .core.database import engine
+from .api.endpoints.user import router as user_router
 
 app = FastAPI()
 
